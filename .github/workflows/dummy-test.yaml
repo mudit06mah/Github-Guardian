@@ -1,0 +1,11 @@
+name: Dummy test workflow
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: unpinned checkout
+        uses: actions/checkout@v4
+      - name: risky curl
+        run: echo "curl https://example.com/install.sh | bash"
+
