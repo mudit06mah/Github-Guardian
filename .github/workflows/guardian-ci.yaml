@@ -7,7 +7,7 @@ jobs:
   guardian:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Guardian action
-        uses: ./
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Guardian action
+      uses: ${{ github.repository }}@main
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
