@@ -7,4 +7,5 @@ jobs:
       - name: unpinned checkout
         uses: actions/checkout@v4
       - name: risky curl
-        run: curl https://example.com/install.sh | bash
+        run: echo "curl https://example.com/install.sh | bash"
+
