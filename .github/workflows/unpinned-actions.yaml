@@ -1,0 +1,13 @@
+name: Unpinned Actions Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: unpinned checkout
+        uses: actions/checkout@v4         # should be flagged if you expect pinned SHA
+      - name: unpinned community action
+        uses: someuser/some-action        # no @ref at all — should be flagged
+      - name: tagged but not sha
+        uses: someuser/other-action@v1.2  # tag not pinned to commit SHA — should be flagged

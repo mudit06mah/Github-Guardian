@@ -1,0 +1,13 @@
+name: Inline Curl/Awk Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: More complex pipe (simulated)
+        run: |
+          # example of curl piped through awk and then to sh (simulate)
+          echo 'curl -sL https://example.com/install.sh | awk "{print}" | sh'
