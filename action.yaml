@@ -2,7 +2,7 @@ name: Guardian - Workflow Scanner
 description: "Static analysis of workflows"
 inputs:
   github_token:
-    description: 'Github token (defaults to workflow token)'
+    description: 'Github token defaults to GITHUB_TOKEN secret'
     required: false
 runs:
   using: "composite"
