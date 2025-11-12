@@ -21,9 +21,13 @@ jobs:
       - name: Install deps
         run: pip install PyGithub pyyaml
       - name: Run Guardian
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.sha }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-        run: python analysis/main.py
+            GITHUB_TOKEN: ${{ inputs.github_token || github.token }}
+            GITHUB_EVENT_NAME: ${{ github.event_name }}
+            GITHUB_EVENT_PATH: ${{ github.event_path }}
+            GITHUB_REPOSITORY: ${{ github.repository }}
+            GITHUB_SHA: ${{ github.sha }}
+            GITHUB_REF: ${{ github.ref }}
+        run: |
+          python analysis/main.py
