@@ -75,7 +75,7 @@ def main():
         conclusion = 'success'
 
     if GITHUB_TOKEN and REPO and HEAD_SHA:
-        createCheckRun(repo_full_name=REPO,
+        createCheckRun( repoFullName= REPO,
                          name="Guardian - Workflow Scanner",
                          head_sha=HEAD_SHA,
                          conclusion=conclusion,
