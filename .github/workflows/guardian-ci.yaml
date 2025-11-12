@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run Guardian action
-      uses: ${{ github.repository }}@main
+      uses: mudit06mah/github-guardianmain
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
