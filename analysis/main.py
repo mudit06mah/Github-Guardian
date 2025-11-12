@@ -79,9 +79,9 @@ def main():
                          name="Guardian - Workflow Scanner",
                          headSHA=HEAD_SHA,
                          conclusion=conclusion,
-                         output_title=f"Guardian result: {severity.upper()}",
-                         output_summary=body,
-                         gh_token=GITHUB_TOKEN)
+                         outputTitle=f"Guardian result: {severity.upper()}",
+                         outputSummary=body,
+                         ghToken=GITHUB_TOKEN)
 
         # If running in a PR, post comment (best-effort: read event)
         if os.path.exists(EVENT_PATH):

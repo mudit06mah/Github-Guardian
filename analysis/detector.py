@@ -1,7 +1,7 @@
 import re
 from typing import List, Dict, Any
 
-UNPINNED_REGEX = re.compile(r'uses:\s*([^@:\s]+)(?:@(,+))?')    #Catches uses: owner/repo@ref
+UNPINNED_REGEX = re.compile(r'uses:\s*([\w./-]+)(?:@([\w.-]+))?', re.IGNORECASE)    #Catches uses: owner/repo@ref
 
 CURL_BASH_REGEX = re.compile(r'\b(curl|wget)\b.*\|\s*(bash|sh)\b',re.IGNORECASE)    #Catches curl or bash
 
@@ -55,7 +55,7 @@ def detectBase64Obfuscation(yamlText: str) -> List[Dict[str,Any]]:
 def detectInlineScripts(yamlParsed: str) -> List[Dict[str,Any]]:
     findings = []
     jobs = yamlParsed.get('jobs',{})
-    for jobName,job in job.items():
+    for jobName, job in jobs.items():
         steps = job.get('steps',[])
         for step in steps:
             run = step.get('run')
