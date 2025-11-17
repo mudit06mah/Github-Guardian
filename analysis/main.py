@@ -95,7 +95,7 @@ def main():
     severity = highestSeverity(allFindings)
 
     severity_threshold = config.get("severity_threshold", "medium")
-    order = {"low":0, "medium":1, "high":2}
+    order = {"low":0, "medium":1, "high":2, "critical":3}
 
     # Drop findings below threshold
     allFindings = [

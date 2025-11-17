@@ -7,7 +7,7 @@ Guardian performs deep static analysis of GitHub Actions workflows to identify s
 ## Features
 
 - **Deep Static Analysis**: Scans workflow YAML files for security issues
-- **Severity Scoring**: Intelligent prioritization (high, medium, low)
+- **Severity Scoring**: Intelligent prioritization (critical, high, medium, low)
 - **PR Comments**: Actionable feedback directly on pull requests
 - **Check Runs**: Integration with GitHub's native check system
 - **Configurable**: Customize thresholds and rules for your needs
@@ -67,8 +67,8 @@ That's it! Guardian will now scan all workflow changes in your pull requests.
 | Input | Description | Default | Required |
 |-------|-------------|---------|----------|
 | `github_token` | GitHub token for API access | - | ✅ |
-| `severity_threshold` | Minimum severity to report (`low`, `medium`, `high`) | `medium` | ❌ |
-| `fail_on_severity` | Fail check at this severity (`none`, `medium`, `high`) | `high` | ❌ |
+| `severity_threshold` | Minimum severity to report (`low`, `medium`, `high`, `critical`) | `medium` | ❌ |
+| `fail_on_severity` | Fail check at this severity (`none`, `medium`, `high`, `critical`) | `high` | ❌ |
 | `scan_mode` | Scan mode: `changed` or `all` | `changed` | ❌ |
 | `config_path` | Path to custom config file | `.github/guardian.yml` | ❌ |
 

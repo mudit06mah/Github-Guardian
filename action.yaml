@@ -12,12 +12,12 @@ inputs:
     required: true
   
   severity_threshold:
-    description: 'Minimum severity to report (low, medium, high)'
+    description: 'Minimum severity to report (low, medium, high, critical)'
     required: false
     default: 'medium'
   
   fail_on_severity:
-    description: 'Fail the check if this severity is found (none, medium, high)'
+    description: 'Fail the check if this severity is found (none, medium, high, critical)'
     required: false
     default: 'high'
   
@@ -35,7 +35,7 @@ outputs:
   findings_count:
     description: 'Total number of findings detected'
   highest_severity:
-    description: 'Highest severity level found (low, medium, high, none)'
+    description: 'Highest severity level found (low, medium, high, critical, none)'
   check_passed:
     description: 'Whether the check passed based on fail_on_severity threshold'
 
