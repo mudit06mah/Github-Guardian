@@ -1,36 +1,80 @@
-name: Guardian - Workflow Scanner
-description: "Static analysis of workflows"
+name: 'GitHub Guardian'
+description: 'Secure your CI/CD pipelines by detecting unpinned actions, risky inline scripts, and supply chain vulnerabilities'
+author: 'Aditya Bansal, Mudit Maheshwari, Sambhav Ghildiyal'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
 
 inputs:
   github_token:
-    description: "GitHub token"
+    description: 'GitHub token for API access (use secrets.GITHUB_TOKEN)'
     required: true
+  
+  severity_threshold:
+    description: 'Minimum severity to report (low, medium, high)'
+    required: false
+    default: 'medium'
+  
+  fail_on_severity:
+    description: 'Fail the check if this severity is found (none, medium, high)'
+    required: false
+    default: 'high'
+  
+  config_path:
+    description: 'Path to Guardian config file (optional)'
+    required: false
+    default: '.github/guardian.yml'
+  
+  scan_mode:
+    description: 'Scan mode: changed (only changed workflows) or all (all workflows)'
+    required: false
+    default: 'changed'
+
+outputs:
+  findings_count:
+    description: 'Total number of findings detected'
+  highest_severity:
+    description: 'Highest severity level found (low, medium, high, none)'
+  check_passed:
+    description: 'Whether the check passed based on fail_on_severity threshold'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    - name: Validate inputs
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.github_token }}" ]; then
+          echo "::error::github_token is required"
+          exit 1
+        fi
 
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+        cache: 'pip'
 
     - name: Install dependencies
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r ${{ github.action_path }}/requirements.txt
 
     - name: Run Guardian analysis
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-        GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
-        GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
-        GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-        GITHUB_SHA: ${{ env.GITHUB_SHA }}
-        GITHUB_REF: ${{ env.GITHUB_REF }}
+        GITHUB_EVENT_NAME: ${{ github.event_name }}
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_REF: ${{ github.ref }}
+        GUARDIAN_SEVERITY_THRESHOLD: ${{ inputs.severity_threshold }}
+        GUARDIAN_FAIL_ON_SEVERITY: ${{ inputs.fail_on_severity }}
+        GUARDIAN_CONFIG_PATH: ${{ inputs.config_path }}
+        GUARDIAN_SCAN_MODE: ${{ inputs.scan_mode }}
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
       run: |
-        python analysis/main.py
+        python ${{ github.action_path }}/analysis/main.py
