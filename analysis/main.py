@@ -1,6 +1,7 @@
-import os, sys, yaml, json
+from logging import config
+import os, yaml, json
+import fnmatch
 from pathlib import Path
-from github import Github
 from detector import(
     detectUnpinnedActions,
     detectCurlBash,
@@ -21,6 +22,25 @@ GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY")
 HEAD_SHA = os.environ.get("GITHUB_SHA")
 EVENT_PATH = os.environ.get("GITHUB_EVENT_PATH")
+
+def loadConfig():
+    default = {
+        "severity_threshold": os.getenv("GUARDIAN_SEVERITY_THRESHOLD", "medium"),
+        "fail_on_severity": os.getenv("GUARDIAN_FAIL_ON_SEVERITY", "high"),
+        "ignore": [],
+    }
+
+    cfg_path = os.getenv("GUARDIAN_CONFIG_PATH", ".github/guardian.yml")
+    if os.path.exists(cfg_path):
+        try:
+            with open(cfg_path) as f:
+                yaml_cfg = yaml.safe_load(f) or {}
+            default.update(yaml_cfg)
+        except Exception:
+            pass
+
+    return default
+
 
 def loadChangedWorkflows():
     files = []
@@ -61,18 +81,41 @@ def main():
         for item in findings:
             item['file'] = str(f)
         allFindings.extend(findings)
+
+    config = loadConfig()
+    ignore_patterns = config.get("ignore", [])
+
+    def isIgnored(finding):
+        for pattern in ignore_patterns:
+            if fnmatch.fnmatch(finding.get("file", ""), pattern):
+                return True
+        return False
+        
+    #drop ignored findings:
+    allFindings = [f for f in allFindings if not isIgnored(f)]    
     
+    #score findings:
     allFindings = scoreFindings(allFindings)
     severity = highestSeverity(allFindings)
 
-    body = makeReport(allFindings)
+    severity_threshold = config.get("severity_threshold", "medium")
+    order = {"low":0, "medium":1, "high":2}
 
-    if severity == 'high':
-        conclusion = 'failure'
-    elif severity == 'medium':
-        conclusion = 'warning'
+    # Drop findings below threshold
+    allFindings = [
+        f for f in allFindings
+        if order[f["severity"]] >= order[severity_threshold]
+    ]
+
+    fail_on = config.get("fail_on_severity", "high")
+
+    # Declare failure according to config severity
+    if order[severity] >= order.get(fail_on, 99):
+        conclusion = "failure"
     else:
-        conclusion = 'success'
+        conclusion = "success"
+
+    body = makeReport(allFindings)
 
     if GITHUB_TOKEN and REPO and HEAD_SHA:
         createCheckRun( repoFullName= REPO,
