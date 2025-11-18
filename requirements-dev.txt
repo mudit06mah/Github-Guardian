@@ -1,2 +1,4 @@
 pytest
 pytest-cov
+black==25.9.0
+click>=8.0 
