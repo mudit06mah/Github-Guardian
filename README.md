@@ -130,6 +130,22 @@ Guardian provides:
     echo "Passed: ${{ steps.guardian.outputs.check_passed }}"
 ```
 
+## Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/mudit06mah/github-guardian.git
+cd github-guardian
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run tests
+python -m pytest tests/
+
+# Test locally
+python analysis/main.py
+```
+
 ## Authors
 
 - **Aditya Bansal**
