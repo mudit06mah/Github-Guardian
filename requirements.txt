@@ -1,6 +1,4 @@
-black==25.9.0
 PyYAML>=6.0
 PyGithub>=1.79
-httpx>=0.24.0
-click>=8.0  
+httpx>=0.24.0 
 
