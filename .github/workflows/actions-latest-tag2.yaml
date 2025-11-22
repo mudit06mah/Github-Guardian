@@ -1,0 +1,11 @@
+name: Actions Latest Tag Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Using latest tag
+        uses: someuser/third-party-action@latest
+      - name: Using main branch
+        uses: someuser/other@main
