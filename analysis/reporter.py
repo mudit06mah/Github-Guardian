@@ -3,7 +3,7 @@ from github import Github
 def makeReport(findings):
     if not findings:
         return "No issues found."
-    lines = ["### Guardian CI Findings\n"]
+    lines = ["### Github Guardian Findings:\n"]
     for f in findings:
         lines.append(f"- **{f['severity'].upper()}**: {f['message']}")
         if 'snippet' in f:

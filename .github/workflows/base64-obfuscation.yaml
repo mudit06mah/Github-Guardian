@@ -1,0 +1,13 @@
+name: Base64 Obfuscation Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: unpinned checkout
+        uses: actions/checkout@v4
+      - name: obfuscated payload (simulated)
+        run: |
+          # simulated long base64 blob (harmless)
+          echo "SGVsbG8sVGhpcyBpcyBhIHNhbXBsZSBiYXNlNjQgc3RyaW5nLi0t" | base64 --decode
