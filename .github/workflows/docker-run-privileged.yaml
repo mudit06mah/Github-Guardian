@@ -1,0 +1,12 @@
+name: Privileged Run Test
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run as sudo (simulated)
+        run: |
+          echo "sudo apt-get update"   # simulation — policy may flag sudo usage in CI
