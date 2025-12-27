@@ -1,0 +1,24 @@
+name: Long Inline Script Test
+on: [push]
+
+jobs:
+  big:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Big inline script
+        run: |
+          # simulate a very long inline script (repeat lines)
+          echo "line1"
+          echo "line2"
+          echo "line3"
+          echo "line4"
+          echo "line5"
+          # (replicate to exceed LONG_INLINE_THRESHOLD in your test)
+          echo "REPEAT" 
+          echo "REPEAT"
+          echo "REPEAT"
+          echo "REPEAT"
+          echo "REPEAT"
+          # ... add more if needed to exceed your threshold
