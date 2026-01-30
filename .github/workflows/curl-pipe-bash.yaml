@@ -1,0 +1,11 @@
+name: Curl Pipe Bash Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: unpinned checkout
+        uses: actions/checkout@v4
+      - name: risky install (simulated)
+        run: echo "curl https://example.com/install.sh | bash"   # simulate risky pattern
